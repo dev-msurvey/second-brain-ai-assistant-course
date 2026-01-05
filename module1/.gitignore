@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Models & Cache
+models/
+.cache/
+*.bin
+*.safetensors
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Output files
+generated_*.png
+generated_*.mp4
+generated_*.mp3
+voiceover*.mp3
+final_video*.mp4
+edited_*.mp4

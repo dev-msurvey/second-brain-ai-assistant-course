@@ -1,0 +1,25 @@
+# Module 4: Fine-tuning Requirements
+
+# Core fine-tuning libraries
+transformers>=4.48.0
+peft>=0.13.2
+accelerate>=1.2.1
+bitsandbytes>=0.45.0
+torch>=2.5.0
+
+# Dataset handling
+datasets>=3.2.0
+
+# Logging and monitoring  
+loguru>=0.7.3
+tqdm>=4.67.1
+
+# Model-specific
+sentencepiece>=0.2.0
+protobuf>=5.29.3
+
+# Optional: Unsloth for faster training (requires specific GPU)
+# unsloth @ git+https://github.com/unslothai/unsloth.git
+
+# Hugging Face Hub
+huggingface-hub>=0.27.0
