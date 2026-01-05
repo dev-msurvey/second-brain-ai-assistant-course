@@ -129,6 +129,34 @@ Plus downloadable ZIP at the end.
 2. Verify using T4 (not CPU)
 3. If persistent, try factory reset runtime
 
+### 🔄 Colab Disconnected Mid-Training?
+**✅ No Problem! Checkpoint System Included**
+
+**What happens:**
+- Notebook auto-saves checkpoint after EVERY trial to Google Drive
+- Checkpoint includes: completed trials, parameters, results
+
+**How to resume:**
+1. Reconnect to Colab
+2. Re-run cells 1-7 (setup + config)
+3. Run cell 8 (check checkpoint) - will show progress
+4. Run cell 9 (optimizer) - **automatically resumes from last completed trial!**
+
+**Example:**
+```
+📁 Checkpoint found!
+Completed trials: 12/20
+Last updated: 2026-01-05T15:30:00
+
+✅ Will resume from trial 13
+```
+
+**To start over completely:**
+- Run the "Delete Checkpoint" cell before running optimizer
+
+**Checkpoint location:**
+`/content/drive/MyDrive/ai_director_optimization_checkpoint.json`
+
 ---
 
 ## 🎓 Understanding the Results
@@ -194,9 +222,16 @@ Use optimized model in production (Module 7-8)
 - Keep Colab tab active (prevents disconnect)
 
 **To Avoid Colab Timeout:**
-- Keep browser tab active
-- Use Colab Pro (longer runtime)
-- Or run in multiple sessions (saves checkpoints)
+- ✅ **Checkpoint system included** - auto-saves after each trial!
+- If disconnected, just reconnect and re-run - resumes automatically
+- Keep browser tab active anyway (helps prevent disconnect)
+- Use Colab Pro (longer runtime, less likely to disconnect)
+- Can pause and resume anytime
+
+**Managing Long Runs:**
+- Split into sessions: Run 10 trials, stop, resume later
+- Checkpoint survives runtime restarts
+- Check progress anytime by running checkpoint check cell
 
 ---
 
