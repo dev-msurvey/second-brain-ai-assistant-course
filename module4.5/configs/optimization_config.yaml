@@ -1,0 +1,91 @@
+# Optimization Configuration for Meta Ax
+# Defines hyperparameter search space for Bayesian optimization
+
+# Search Space
+search_space:
+  lora_rank:
+    type: choice
+    values: [8, 16, 32, 64]
+    description: "LoRA rank - model capacity"
+    
+  lora_alpha:
+    type: choice
+    values: [16, 32, 64, 128]
+    description: "LoRA alpha - adaptation strength"
+    
+  learning_rate:
+    type: range
+    bounds: [0.00001, 0.0005]  # 1e-5 to 5e-4
+    log_scale: true
+    description: "Learning rate for AdamW optimizer"
+    
+  batch_size:
+    type: choice
+    values: [1, 2, 4]
+    description: "Per-device training batch size"
+
+# Optimization Settings
+optimization:
+  num_trials: 20
+  num_parallel: 1  # Increase if multiple GPUs available
+  objective: "minimize"
+  metric: "eval_loss"
+  
+  # Early stopping (optional)
+  early_stopping:
+    enabled: false
+    threshold: 0.7  # Stop if loss > 0.7
+    check_at: 0.1   # Check after 10% of training
+    
+  # Constraints (optional)
+  constraints: []
+  # Example: ["lora_rank * batch_size <= 128"]  # VRAM limit
+
+# Fixed Training Parameters
+fixed_params:
+  model_name: "Qwen/Qwen2.5-7B-Instruct"
+  num_train_epochs: 1  # Fast evaluation per trial
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  gradient_accumulation_steps: 4
+  max_grad_norm: 1.0
+  fp16: true
+  gradient_checkpointing: true
+  optim: "adamw_torch"
+  lr_scheduler_type: "cosine"
+  
+  # LoRA config (non-optimized parts)
+  lora_target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+  lora_dropout: 0.05
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+# Dataset
+dataset:
+  path: "../module3/dataset/ai_director_dataset.json"
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+  max_seq_length: 2048
+
+# Output
+output:
+  results_file: "configs/optimization_results.json"
+  best_config_file: "configs/best_config.yaml"
+  checkpoint_dir: "checkpoints/"
+  logs_dir: "logs/"
+
+# Baseline (for comparison)
+baseline:
+  lora_rank: 16
+  lora_alpha: 32
+  learning_rate: 0.0002
+  batch_size: 1
+  loss: 0.6097  # Current best

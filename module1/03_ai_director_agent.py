@@ -9,6 +9,7 @@ AI Director v3.4
 from typing import Dict, List, Any, Optional
 import json
 from datetime import datetime
+from PIL import Image
 
 # Import our components
 import sys
@@ -99,7 +100,8 @@ class AIDirectorAgent:
     def process_brief(
         self,
         brief: str,
-        brand_context: Optional[str] = None
+        brand_context: Optional[str] = None,
+        reference_image: Optional[Image.Image] = None
     ) -> Dict[str, Any]:
         """
         Main workflow: Process marketing brief end-to-end
@@ -107,6 +109,7 @@ class AIDirectorAgent:
         Args:
             brief: Marketing brief from user
             brand_context: Optional brand guidelines
+            reference_image: Optional reference image (NEW: Multimodal)
             
         Returns:
             Complete result with strategy, tool calls, and outputs
@@ -117,17 +120,24 @@ class AIDirectorAgent:
             print("\n" + "=" * 70)
             print("🎬 PROCESSING BRIEF")
             print("=" * 70)
-            print(f"\n📝 Brief:\n{brief}\n")
+            print(f"\n📝 Brief:\n{brief}")
+            if reference_image:
+                print(f"\n🖼️ Reference Image: Provided ({reference_image.size})")
+            print()
         
-        # STEP 1: THINKER - Generate Strategy
+        # STEP 1: THINKER - Generate Strategy (with optional image)
         if self.verbose:
             print("-" * 70)
-            print("STEP 1: 🧠 THINKER - Generating Strategy...")
+            if reference_image:
+                print("STEP 1: 🧠 THINKER - Generating Strategy (Multimodal: Text + Image)...")
+            else:
+                print("STEP 1: 🧠 THINKER - Generating Strategy...")
             print("-" * 70)
         
         strategy = self.thinker.generate_strategy(
             brief=brief,
-            brand_context=brand_context
+            brand_context=brand_context,
+            reference_image=reference_image
         )
         
         if self.verbose:
@@ -171,6 +181,7 @@ class AIDirectorAgent:
         return {
             "brief": brief,
             "brand_context": brand_context,
+            "has_reference_image": reference_image is not None,
             "strategy": strategy,
             "tool_calls": tool_calls,
             "results": results,

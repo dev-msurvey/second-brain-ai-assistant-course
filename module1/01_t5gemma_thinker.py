@@ -51,15 +51,17 @@ class T5GemmaThinker:
         self, 
         brief: str,
         brand_context: Optional[str] = None,
+        reference_image: Optional[Image.Image] = None,
         max_length: int = 500,
         temperature: float = 0.7
     ) -> str:
         """
-        Generate marketing strategy จาก brief
+        Generate marketing strategy จาก brief (supports text + image)
         
         Args:
             brief: Marketing brief
             brand_context: Brand guidelines (จาก RAG)
+            reference_image: Optional reference image (PIL.Image)
             max_length: Maximum output tokens
             temperature: Creativity level (0.0-1.0)
             
@@ -67,7 +69,25 @@ class T5GemmaThinker:
             Generated strategy as text
         """
         # สร้าง prompt
-        prompt = f"""You are a creative director for a marketing agency.
+        if reference_image:
+            prompt = f"""You are a creative director for a marketing agency.
+Analyze the provided image and generate a detailed content strategy.
+
+BRAND CONTEXT:
+{brand_context if brand_context else "No specific brand guidelines."}
+
+BRIEF:
+{brief}
+
+Based on the image and brief, generate:
+1. Creative Concept (inspired by image)
+2. Image Description (for SDXL)
+3. Voice Script (Thai)
+4. Technical Specs
+
+STRATEGY:"""
+        else:
+            prompt = f"""You are a creative director for a marketing agency.
 Generate a detailed content strategy based on this brief.
 
 BRAND CONTEXT:
@@ -84,8 +104,15 @@ Generate:
 
 STRATEGY:"""
 
-        # Generate
-        inputs = self.processor(text=prompt, return_tensors="pt").to(self.model.device)
+        # Generate (with or without image)
+        if reference_image:
+            inputs = self.processor(
+                text=prompt, 
+                images=reference_image, 
+                return_tensors="pt"
+            ).to(self.model.device)
+        else:
+            inputs = self.processor(text=prompt, return_tensors="pt").to(self.model.device)
         
         with torch.no_grad():
             outputs = self.model.generate(
@@ -98,6 +125,47 @@ STRATEGY:"""
         
         result = self.processor.decode(outputs[0], skip_special_tokens=True)
         return result
+    
+    def analyze_image(
+        self,
+        image: Image.Image,
+        task: str = "describe"
+    ) -> str:
+        """
+        Analyze image for marketing purposes (NEW: Multimodal capability)
+        
+        Args:
+            image: PIL Image to analyze
+            task: "describe", "brand_analysis", "composition", "mood"
+            
+        Returns:
+            Analysis text
+        """
+        prompts = {
+            "describe": "<start_of_image> Describe this image in detail for a marketing brief.",
+            "brand_analysis": "<start_of_image> Analyze this image from a brand identity perspective. Identify colors, mood, style, and target audience.",
+            "composition": "<start_of_image> Analyze the composition, lighting, and visual hierarchy of this image for a photographer.",
+            "mood": "<start_of_image> Describe the mood, emotion, and atmosphere conveyed by this image."
+        }
+        
+        prompt = prompts.get(task, prompts["describe"])
+        
+        inputs = self.processor(
+            text=prompt,
+            images=image,
+            return_tensors="pt"
+        ).to(self.model.device)
+        
+        with torch.no_grad():
+            outputs = self.model.generate(
+                **inputs,
+                max_new_tokens=300,
+                temperature=0.7,
+                do_sample=True
+            )
+        
+        result = self.processor.decode(outputs[0], skip_special_tokens=True)
+        return result.strip()
     
     def generate_image_prompt(
         self,
@@ -260,9 +328,9 @@ SCRIPT:"""
 
 
 def demo_t5gemma():
-    """Demo script to test T5Gemma 2"""
+    """Demo script to test T5Gemma 2 (Text + Image)"""
     print("=" * 70)
-    print("🧠 T5GEMMA 2 (THINKER) - DEMO")
+    print("🧠 T5GEMMA 2 (THINKER) - MULTIMODAL DEMO")
     print("=" * 70)
     print()
     
@@ -270,8 +338,8 @@ def demo_t5gemma():
     thinker = T5GemmaThinker(model_size="1b-1b")
     print()
     
-    # Test 1: Generate Strategy
-    print("📝 TEST 1: Generate Marketing Strategy")
+    # Test 1: Generate Strategy (text only)
+    print("📝 TEST 1: Generate Marketing Strategy (Text Only)")
     print("-" * 70)
     brief = """
     Product: CoffeeLab Cold Brew Premium
@@ -284,16 +352,47 @@ def demo_t5gemma():
     print(f"Strategy:\n{strategy}")
     print()
     
-    # Test 2: Generate Image Prompt
-    print("📝 TEST 2: Generate SDXL Prompt")
+    # Test 2: Analyze Image (NEW: Multimodal)
+    print("📝 TEST 2: Analyze Reference Image (NEW: Multimodal)")
+    print("-" * 70)
+    print("Loading sample image from URL...")
+    
+    try:
+        # Load a sample product image
+        image_url = "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400"
+        response = requests.get(image_url, timeout=10)
+        image = Image.open(BytesIO(response.content))
+        
+        # Analyze image
+        analysis = thinker.analyze_image(image, task="brand_analysis")
+        print(f"Image Analysis:\n{analysis}")
+        print()
+        
+        # Test 3: Generate Strategy with Image
+        print("📝 TEST 3: Generate Strategy with Reference Image")
+        print("-" * 70)
+        strategy_with_image = thinker.generate_strategy(
+            brief="Create social media content based on this coffee product image",
+            reference_image=image
+        )
+        print(f"Strategy (with image context):\n{strategy_with_image}")
+        print()
+        
+    except Exception as e:
+        print(f"⚠️  Could not load image: {e}")
+        print("Skipping multimodal tests (requires internet connection)")
+        print()
+    
+    # Test 4: Generate Image Prompt
+    print("📝 TEST 4: Generate SDXL Prompt")
     print("-" * 70)
     image_brief = "Premium cold brew coffee bottle on modern desk"
     image_prompt = thinker.generate_image_prompt(image_brief, style="minimal")
     print(f"SDXL Prompt:\n{image_prompt}")
     print()
     
-    # Test 3: Generate Voice Script
-    print("📝 TEST 3: Generate Voice Script")
+    # Test 5: Generate Voice Script
+    print("📝 TEST 5: Generate Voice Script")
     print("-" * 70)
     concept = "Introducing new cold brew coffee - fresh, bold, energizing"
     script = thinker.generate_voice_script(concept, duration=15, tone="friendly")
@@ -301,7 +400,7 @@ def demo_t5gemma():
     print()
     
     print("=" * 70)
-    print("✅ T5Gemma 2 Demo Complete!")
+    print("✅ T5Gemma 2 Multimodal Demo Complete!")
     print("=" * 70)
 
 
