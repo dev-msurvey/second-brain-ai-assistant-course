@@ -1,0 +1,12 @@
+model: Qwen/Qwen2.5-7B-Instruct
+lora_rank: 32
+lora_alpha: 64
+learning_rate: 0.00012
+batch_size: 2
+best_loss: 0.5621
+improvement: 7.8%
+optimized_at: '2026-01-05T12:32:15'
+
+# NOTE: These are SIMULATED results for demonstration
+# Run actual optimization on Google Colab with T4 GPU for real results
+# See: Module_4_5_Optimization.ipynb
