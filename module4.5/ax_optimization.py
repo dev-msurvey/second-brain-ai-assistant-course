@@ -26,8 +26,16 @@ from loguru import logger
 
 # Import training function from Module 4
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / "module4" / "scripts"))
-from finetune_lora import AIDirectorFineTuner, FineTuningConfig
+module4_path = str(Path(__file__).parent.parent / "module4" / "scripts")
+if module4_path not in sys.path:
+    sys.path.insert(0, module4_path)
+
+try:
+    from finetune_lora import AIDirectorFineTuner, FineTuningConfig
+except ImportError:
+    # For Colab: try different path
+    sys.path.insert(0, "../module4/scripts")
+    from finetune_lora import AIDirectorFineTuner, FineTuningConfig
 
 
 class HyperparameterOptimizer:
