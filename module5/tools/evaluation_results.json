@@ -1,0 +1,741 @@
+{
+  "summary": {
+    "hybrid": {
+      "precision@k": 0.4333333333333333,
+      "recall@k": 0.9,
+      "f1": 0.5700000000000001,
+      "mrr": 0.95,
+      "ndcg@k": 0.89,
+      "latency_ms": 456.0320854187012,
+      "success_rate": 1.0
+    },
+    "vector": {
+      "precision@k": 0.39999999999999997,
+      "recall@k": 0.85,
+      "f1": 0.53,
+      "mrr": 0.8333333333333334,
+      "ndcg@k": 0.83,
+      "latency_ms": 34.13512706756592,
+      "success_rate": 0.9
+    },
+    "bm25": {
+      "precision@k": 0.36666666666666664,
+      "recall@k": 0.8,
+      "f1": 0.49,
+      "mrr": 0.9,
+      "ndcg@k": 0.8200000000000001,
+      "latency_ms": 9.429717063903809,
+      "success_rate": 0.9
+    }
+  },
+  "detailed_results": {
+    "hybrid": [
+      {
+        "query": "specialty coffee brand for young professionals",
+        "expected_brands": [
+          "CoffeeLab"
+        ],
+        "retrieved_brands": [
+          "CoffeeLab",
+          "GlowLab",
+          "UrbanNest"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 3125.3161430358887
+        },
+        "success": true
+      },
+      {
+        "query": "modern fitness center with technology",
+        "expected_brands": [
+          "FitFlow"
+        ],
+        "retrieved_brands": [
+          "FitFlow",
+          "TechZone",
+          "CoffeeLab"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 157.06253051757812
+        },
+        "success": true
+      },
+      {
+        "query": "natural skincare with Thai ingredients",
+        "expected_brands": [
+          "GlowLab"
+        ],
+        "retrieved_brands": [
+          "GlowLab",
+          "UrbanNest",
+          "GreenLeaf"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 183.29143524169922
+        },
+        "success": true
+      },
+      {
+        "query": "eco-friendly sustainable green brand",
+        "expected_brands": [
+          "GreenLeaf",
+          "CoffeeLab"
+        ],
+        "retrieved_brands": [
+          "GreenLeaf",
+          "CoffeeLab",
+          "GlowLab"
+        ],
+        "metrics": {
+          "precision@k": 0.6666666666666666,
+          "recall@k": 1.0,
+          "f1": 0.8,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 284.43241119384766
+        },
+        "success": true
+      },
+      {
+        "query": "minimalist Scandinavian furniture for urban millennials",
+        "expected_brands": [
+          "UrbanNest"
+        ],
+        "retrieved_brands": [
+          "UrbanNest",
+          "GreenLeaf",
+          "CoffeeLab"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 328.6280632019043
+        },
+        "success": true
+      },
+      {
+        "query": "technology startup for professionals",
+        "expected_brands": [
+          "TechZone",
+          "FitFlow"
+        ],
+        "retrieved_brands": [
+          "FitFlow",
+          "EduKid",
+          "TechZone"
+        ],
+        "metrics": {
+          "precision@k": 0.6666666666666666,
+          "recall@k": 1.0,
+          "f1": 0.8,
+          "mrr": 1.0,
+          "ndcg@k": 0.9000000000000001,
+          "latency_ms": 178.9562702178955
+        },
+        "success": true
+      },
+      {
+        "query": "brand with blue and white color scheme",
+        "expected_brands": [
+          "FitFlow",
+          "TechZone"
+        ],
+        "retrieved_brands": [
+          "CoffeeLab",
+          "TechZone",
+          "GreenLeaf"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 0.5,
+          "f1": 0.4,
+          "mrr": 0.5,
+          "ndcg@k": 0.4,
+          "latency_ms": 35.213470458984375
+        },
+        "success": true
+      },
+      {
+        "query": "family-oriented traditional values",
+        "expected_brands": [
+          "PetPals",
+          "EduKid"
+        ],
+        "retrieved_brands": [
+          "PetPals",
+          "GreenLeaf",
+          "UrbanNest"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 0.5,
+          "f1": 0.4,
+          "mrr": 1.0,
+          "ndcg@k": 0.6000000000000001,
+          "latency_ms": 33.98442268371582
+        },
+        "success": true
+      },
+      {
+        "query": "premium affordable luxury design",
+        "expected_brands": [
+          "UrbanNest",
+          "CoffeeLab"
+        ],
+        "retrieved_brands": [
+          "UrbanNest",
+          "CoffeeLab",
+          "GreenLeaf"
+        ],
+        "metrics": {
+          "precision@k": 0.6666666666666666,
+          "recall@k": 1.0,
+          "f1": 0.8,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 199.7075080871582
+        },
+        "success": true
+      },
+      {
+        "query": "educational content for children",
+        "expected_brands": [
+          "EduKid"
+        ],
+        "retrieved_brands": [
+          "EduKid",
+          "PetPals",
+          "GreenLeaf"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 33.728599548339844
+        },
+        "success": true
+      }
+    ],
+    "vector": [
+      {
+        "query": "specialty coffee brand for young professionals",
+        "expected_brands": [
+          "CoffeeLab"
+        ],
+        "retrieved_brands": [
+          "CoffeeLab",
+          "GlowLab",
+          "UrbanNest"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 31.08978271484375
+        },
+        "success": true
+      },
+      {
+        "query": "modern fitness center with technology",
+        "expected_brands": [
+          "FitFlow"
+        ],
+        "retrieved_brands": [
+          "FitFlow",
+          "TechZone",
+          "GlowLab"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 38.4824275970459
+        },
+        "success": true
+      },
+      {
+        "query": "natural skincare with Thai ingredients",
+        "expected_brands": [
+          "GlowLab"
+        ],
+        "retrieved_brands": [
+          "GlowLab",
+          "UrbanNest",
+          "FitFlow"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 31.319141387939453
+        },
+        "success": true
+      },
+      {
+        "query": "eco-friendly sustainable green brand",
+        "expected_brands": [
+          "GreenLeaf",
+          "CoffeeLab"
+        ],
+        "retrieved_brands": [
+          "GreenLeaf",
+          "CoffeeLab",
+          "UrbanNest"
+        ],
+        "metrics": {
+          "precision@k": 0.6666666666666666,
+          "recall@k": 1.0,
+          "f1": 0.8,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 30.940532684326172
+        },
+        "success": true
+      },
+      {
+        "query": "minimalist Scandinavian furniture for urban millennials",
+        "expected_brands": [
+          "UrbanNest"
+        ],
+        "retrieved_brands": [
+          "UrbanNest",
+          "GreenLeaf",
+          "CoffeeLab"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 32.240867614746094
+        },
+        "success": true
+      },
+      {
+        "query": "technology startup for professionals",
+        "expected_brands": [
+          "TechZone",
+          "FitFlow"
+        ],
+        "retrieved_brands": [
+          "TechZone",
+          "FitFlow",
+          "EduKid"
+        ],
+        "metrics": {
+          "precision@k": 0.6666666666666666,
+          "recall@k": 1.0,
+          "f1": 0.8,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 31.592130661010742
+        },
+        "success": true
+      },
+      {
+        "query": "brand with blue and white color scheme",
+        "expected_brands": [
+          "FitFlow",
+          "TechZone"
+        ],
+        "retrieved_brands": [
+          "GlowLab",
+          "CoffeeLab",
+          "UrbanNest"
+        ],
+        "metrics": {
+          "precision@k": 0.0,
+          "recall@k": 0.0,
+          "f1": 0.0,
+          "mrr": 0.0,
+          "ndcg@k": 0.0,
+          "latency_ms": 31.42070770263672
+        },
+        "success": false
+      },
+      {
+        "query": "family-oriented traditional values",
+        "expected_brands": [
+          "PetPals",
+          "EduKid"
+        ],
+        "retrieved_brands": [
+          "GreenLeaf",
+          "UrbanNest",
+          "PetPals"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 0.5,
+          "f1": 0.4,
+          "mrr": 0.3333333333333333,
+          "ndcg@k": 0.30000000000000004,
+          "latency_ms": 39.450645446777344
+        },
+        "success": true
+      },
+      {
+        "query": "premium affordable luxury design",
+        "expected_brands": [
+          "UrbanNest",
+          "CoffeeLab"
+        ],
+        "retrieved_brands": [
+          "UrbanNest",
+          "CoffeeLab",
+          "GreenLeaf"
+        ],
+        "metrics": {
+          "precision@k": 0.6666666666666666,
+          "recall@k": 1.0,
+          "f1": 0.8,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 41.072845458984375
+        },
+        "success": true
+      },
+      {
+        "query": "educational content for children",
+        "expected_brands": [
+          "EduKid"
+        ],
+        "retrieved_brands": [
+          "EduKid",
+          "PetPals",
+          "GreenLeaf"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 33.74218940734863
+        },
+        "success": true
+      }
+    ],
+    "bm25": [
+      {
+        "query": "specialty coffee brand for young professionals",
+        "expected_brands": [
+          "CoffeeLab"
+        ],
+        "retrieved_brands": [
+          "CoffeeLab",
+          "UrbanNest",
+          "GlowLab"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 8.720636367797852
+        },
+        "success": true
+      },
+      {
+        "query": "modern fitness center with technology",
+        "expected_brands": [
+          "FitFlow"
+        ],
+        "retrieved_brands": [
+          "FitFlow",
+          "CoffeeLab",
+          "TechZone"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 13.74197006225586
+        },
+        "success": true
+      },
+      {
+        "query": "natural skincare with Thai ingredients",
+        "expected_brands": [
+          "GlowLab"
+        ],
+        "retrieved_brands": [
+          "GlowLab",
+          "UrbanNest",
+          "TechZone"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 13.380765914916992
+        },
+        "success": true
+      },
+      {
+        "query": "eco-friendly sustainable green brand",
+        "expected_brands": [
+          "GreenLeaf",
+          "CoffeeLab"
+        ],
+        "retrieved_brands": [
+          "GreenLeaf",
+          "CoffeeLab",
+          "GlowLab"
+        ],
+        "metrics": {
+          "precision@k": 0.6666666666666666,
+          "recall@k": 1.0,
+          "f1": 0.8,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 8.840084075927734
+        },
+        "success": true
+      },
+      {
+        "query": "minimalist Scandinavian furniture for urban millennials",
+        "expected_brands": [
+          "UrbanNest"
+        ],
+        "retrieved_brands": [
+          "UrbanNest",
+          "GreenLeaf",
+          "CoffeeLab"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 8.807182312011719
+        },
+        "success": true
+      },
+      {
+        "query": "technology startup for professionals",
+        "expected_brands": [
+          "TechZone",
+          "FitFlow"
+        ],
+        "retrieved_brands": [
+          "FitFlow",
+          "CoffeeLab",
+          "UrbanNest"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 0.5,
+          "f1": 0.4,
+          "mrr": 1.0,
+          "ndcg@k": 0.6000000000000001,
+          "latency_ms": 8.103370666503906
+        },
+        "success": true
+      },
+      {
+        "query": "brand with blue and white color scheme",
+        "expected_brands": [
+          "FitFlow",
+          "TechZone"
+        ],
+        "retrieved_brands": [
+          "PetPals",
+          "UrbanNest",
+          "CoffeeLab"
+        ],
+        "metrics": {
+          "precision@k": 0.0,
+          "recall@k": 0.0,
+          "f1": 0.0,
+          "mrr": 0.0,
+          "ndcg@k": 0.0,
+          "latency_ms": 8.007526397705078
+        },
+        "success": false
+      },
+      {
+        "query": "family-oriented traditional values",
+        "expected_brands": [
+          "PetPals",
+          "EduKid"
+        ],
+        "retrieved_brands": [
+          "PetPals",
+          "FitFlow",
+          "GreenLeaf"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 0.5,
+          "f1": 0.4,
+          "mrr": 1.0,
+          "ndcg@k": 0.6000000000000001,
+          "latency_ms": 8.04448127746582
+        },
+        "success": true
+      },
+      {
+        "query": "premium affordable luxury design",
+        "expected_brands": [
+          "UrbanNest",
+          "CoffeeLab"
+        ],
+        "retrieved_brands": [
+          "UrbanNest",
+          "CoffeeLab",
+          "PetPals"
+        ],
+        "metrics": {
+          "precision@k": 0.6666666666666666,
+          "recall@k": 1.0,
+          "f1": 0.8,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 7.95292854309082
+        },
+        "success": true
+      },
+      {
+        "query": "educational content for children",
+        "expected_brands": [
+          "EduKid"
+        ],
+        "retrieved_brands": [
+          "EduKid",
+          "PetPals",
+          "FitFlow"
+        ],
+        "metrics": {
+          "precision@k": 0.3333333333333333,
+          "recall@k": 1.0,
+          "f1": 0.5,
+          "mrr": 1.0,
+          "ndcg@k": 1.0,
+          "latency_ms": 8.698225021362305
+        },
+        "success": true
+      }
+    ]
+  },
+  "test_cases": [
+    {
+      "query": "specialty coffee brand for young professionals",
+      "expected_brands": [
+        "CoffeeLab"
+      ],
+      "category": "product_search",
+      "difficulty": "easy"
+    },
+    {
+      "query": "modern fitness center with technology",
+      "expected_brands": [
+        "FitFlow"
+      ],
+      "category": "product_search",
+      "difficulty": "easy"
+    },
+    {
+      "query": "natural skincare with Thai ingredients",
+      "expected_brands": [
+        "GlowLab"
+      ],
+      "category": "product_search",
+      "difficulty": "medium"
+    },
+    {
+      "query": "eco-friendly sustainable green brand",
+      "expected_brands": [
+        "GreenLeaf",
+        "CoffeeLab"
+      ],
+      "category": "values_search",
+      "difficulty": "medium"
+    },
+    {
+      "query": "minimalist Scandinavian furniture for urban millennials",
+      "expected_brands": [
+        "UrbanNest"
+      ],
+      "category": "style_search",
+      "difficulty": "medium"
+    },
+    {
+      "query": "technology startup for professionals",
+      "expected_brands": [
+        "TechZone",
+        "FitFlow"
+      ],
+      "category": "audience_search",
+      "difficulty": "medium"
+    },
+    {
+      "query": "brand with blue and white color scheme",
+      "expected_brands": [
+        "FitFlow",
+        "TechZone"
+      ],
+      "category": "visual_search",
+      "difficulty": "hard"
+    },
+    {
+      "query": "family-oriented traditional values",
+      "expected_brands": [
+        "PetPals",
+        "EduKid"
+      ],
+      "category": "values_search",
+      "difficulty": "hard"
+    },
+    {
+      "query": "premium affordable luxury design",
+      "expected_brands": [
+        "UrbanNest",
+        "CoffeeLab"
+      ],
+      "category": "positioning_search",
+      "difficulty": "hard"
+    },
+    {
+      "query": "educational content for children",
+      "expected_brands": [
+        "EduKid"
+      ],
+      "category": "product_search",
+      "difficulty": "easy"
+    }
+  ]
+}
