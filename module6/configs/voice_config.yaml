@@ -1,0 +1,98 @@
+# Module 6: Voice Generation Configuration
+
+# Default voice settings
+default_voice:
+  thai_male: "th-TH-NiwatNeural"
+  thai_female: "th-TH-PremwadeeNeural"
+  english_male: "en-US-GuyNeural"
+  english_female: "en-US-JennyNeural"
+
+# Voice parameters
+voice_defaults:
+  rate: "+0%"  # Speaking rate (-50% to +100%)
+  pitch: "+0Hz"  # Pitch adjustment (-50Hz to +50Hz)
+  volume: "+0%"  # Volume adjustment (-50% to +50%)
+
+# Subtitle settings
+subtitles:
+  enabled: true
+  formats:
+    - "srt"  # SubRip format
+    - "vtt"  # WebVTT format
+  words_per_line: 6
+  max_line_length: 42
+
+# Audio output settings
+audio:
+  format: "mp3"  # Options: "mp3", "wav", "ogg"
+  bitrate: "192k"  # For mp3
+  sample_rate: 24000  # Hz
+  channels: 1  # Mono
+
+# Thai voice configurations
+thai_voices:
+  male:
+    voice_id: "th-TH-NiwatNeural"
+    gender: "Male"
+    locale: "th-TH"
+    recommended_rate: "+0%"
+    
+  female:
+    voice_id: "th-TH-PremwadeeNeural"
+    gender: "Female"
+    locale: "th-TH"
+    recommended_rate: "+0%"
+
+# English voice configurations
+english_voices:
+  male_us:
+    voice_id: "en-US-GuyNeural"
+    gender: "Male"
+    locale: "en-US"
+    style: "Professional"
+    
+  female_us:
+    voice_id: "en-US-JennyNeural"
+    gender: "Female"
+    locale: "en-US"
+    style: "Friendly"
+    
+  male_uk:
+    voice_id: "en-GB-RyanNeural"
+    gender: "Male"
+    locale: "en-GB"
+    style: "British"
+    
+  female_uk:
+    voice_id: "en-GB-SoniaNeural"
+    gender: "Female"
+    locale: "en-GB"
+    style: "British"
+
+# Processing settings
+processing:
+  retry_attempts: 3
+  retry_delay: 2  # seconds
+  timeout: 30  # seconds
+  
+# Batch settings
+batch:
+  max_concurrent: 5
+  delay_between: 1  # seconds
+
+# Output organization
+output:
+  directory: "./output/voices"
+  naming_pattern: "{voice}_{timestamp}"
+  create_subdirs: true
+
+# Quality settings
+quality:
+  normalization: true  # Normalize audio levels
+  noise_reduction: false  # (Not available in Edge-TTS)
+  
+# Cache settings
+cache:
+  enabled: false
+  directory: "./cache/voices"
+  max_size_mb: 500

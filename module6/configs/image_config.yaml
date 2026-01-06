@@ -1,0 +1,69 @@
+# Module 6: Image Generation Configuration
+
+# Default model
+default_model: "sdxl"  # Options: "sdxl", "flux-dev", "flux-schnell"
+
+# HuggingFace API settings
+hf_api:
+  timeout: 60  # seconds
+  retry_attempts: 3
+  retry_delay: 5  # seconds
+
+# Image generation defaults
+image_defaults:
+  width: 1024
+  height: 1024
+  num_inference_steps: 50
+  guidance_scale: 7.5
+  
+# Style presets
+style_presets:
+  product:
+    positive: "professional photography, 4K, high quality, studio lighting, sharp focus"
+    negative: "blurry, low quality, watermark, text, distorted"
+  
+  cinematic:
+    positive: "cinematic lighting, dramatic, film grain, depth of field, anamorphic"
+    negative: "cartoon, anime, illustration, oversaturated"
+  
+  minimal:
+    positive: "minimalist, clean, simple, elegant, white background"
+    negative: "cluttered, busy, complex, noisy"
+  
+  realistic:
+    positive: "photorealistic, realistic, detailed, natural lighting, raw photo"
+    negative: "painting, drawing, artificial, CGI, 3D render"
+
+# Model configurations
+models:
+  sdxl:
+    id: "stabilityai/stable-diffusion-xl-base-1.0"
+    max_resolution: 1024
+    recommended_steps: 50
+    
+  flux-dev:
+    id: "black-forest-labs/FLUX.1-dev"
+    max_resolution: 1024
+    recommended_steps: 28
+    
+  flux-schnell:
+    id: "black-forest-labs/FLUX.1-schnell"
+    max_resolution: 1024
+    recommended_steps: 4  # Fast generation
+
+# Output settings
+output:
+  format: "png"  # Options: "png", "jpg", "webp"
+  quality: 95  # For jpg/webp (1-100)
+  optimize: true
+  
+# Rate limiting (for free tier)
+rate_limits:
+  requests_per_hour: 1000
+  requests_per_minute: 60
+  
+# Caching (optional)
+cache:
+  enabled: false
+  directory: "./cache/images"
+  max_size_mb: 1000

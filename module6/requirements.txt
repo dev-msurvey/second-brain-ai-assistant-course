@@ -1,0 +1,41 @@
+# Module 6: Production Tools Requirements
+
+# Core dependencies
+edge-tts==6.1.9             # Voice generation (Thai + English)
+moviepy==1.0.3              # Video composition
+Pillow==10.2.0              # Image processing
+requests==2.31.0            # HTTP requests for APIs
+
+# HuggingFace for image generation
+huggingface-hub==0.20.3     # HF API client
+diffusers==0.25.1           # Diffusion models (optional, for local)
+transformers==4.36.2        # Model loading (optional, for local)
+
+# Audio processing
+pydub==0.25.1               # Audio manipulation
+soundfile==0.12.1           # Audio file I/O
+
+# Subtitle generation
+pysrt==1.1.2                # SRT subtitle files
+webvtt-py==0.4.6            # WebVTT subtitle files
+
+# Utilities
+python-dotenv==1.0.0        # Environment variables
+pyyaml==6.0.1               # Configuration files
+tqdm==4.66.1                # Progress bars
+colorama==0.4.6             # Colored terminal output
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3      # Async test support
+pytest-cov==4.1.0           # Coverage reporting
+
+# Optional: Torch for local image generation (commented out for zero-cost)
+# torch==2.1.2
+# torchvision==0.16.2
+# accelerate==0.25.0
+
+# Development tools
+black==23.12.1              # Code formatter
+flake8==7.0.0               # Linter
+mypy==1.8.0                 # Type checker
