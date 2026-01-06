@@ -91,6 +91,316 @@
 
 ---
 
+## 🔗 Module 4 Training Context (Google Colab)
+
+> **สำคัญ**: Module 5 (Vector RAG) ต้องใช้ร่วมกับ Module 4 (Fine-tuned Model) ถึงจะเป็น AI Director ที่สมบูรณ์
+
+### ภาพรวม Module 4
+
+**Module 4** เป็น Fine-tuning Model บน Google Colab เพื่อสร้าง AI Director ที่เข้าใจ 8 brands:
+
+- **Base Model**: Qwen/Qwen2.5-7B-Instruct (7.62B parameters)
+- **Method**: LoRA (Low-Rank Adaptation) + 4-bit Quantization (QLoRA)
+- **Platform**: Google Colab Free Tier (Tesla T4 GPU)
+- **Dataset**: 185 samples (8 brands × 5 use cases)
+- **Training Time**: ~2.5 hours
+- **Model Size**: 666 MB (LoRA adapters only)
+
+### วิธีการ Training บน Google Colab (จาก Module 4)
+
+#### 1. เปิด Google Colab
+
+```
+https://colab.research.google.com
+```
+
+#### 2. Upload Notebook
+
+- **File**: `module4/AI_Director_Training_v2_Final.ipynb`
+- **Branch**: `feature/module4-training-v2`
+- หรือใช้ URL: https://github.com/decodingai-magazine/second-brain-ai-assistant-course
+
+#### 3. Enable GPU
+
+```
+Runtime → Change runtime type → T4 GPU → Save
+```
+
+#### 4. Run All Cells
+
+```
+Runtime → Run all (หรือ Ctrl+F9)
+```
+
+Process จะรัน:
+1. ✅ Check GPU availability (Tesla T4)
+2. ✅ Clone repository (~30 seconds)
+3. ✅ Install dependencies (~2 minutes)
+4. ✅ Load dataset (185 samples)
+5. ✅ Load base model + quantization (~5 minutes)
+6. ✅ Train with LoRA (~2.5 hours)
+7. ✅ Save checkpoints (checkpoint-111 = best)
+
+#### 5. Download Results
+
+หลัง training เสร็จ:
+```bash
+# Download จาก Colab
+trained_models.zip  (666 MB)
+
+# Files ภายใน:
+├── adapter_model.safetensors  (154 MB - LoRA weights)
+├── adapter_config.json        (LoRA config)
+├── training_args.bin          (training parameters)
+├── tokenizer files            (tokenizer + vocab)
+```
+
+#### 6. Copy to Local
+
+```bash
+# Extract
+unzip trained_models.zip
+
+# Copy to module4/models/
+cp -r qwen-7b-ai-director-v2 module4/models/
+
+# Verify
+ls module4/models/qwen-7b-ai-director-v2/checkpoint-111/
+# Should see: adapter_model.safetensors, adapter_config.json, etc.
+```
+
+---
+
+### ปัญหาที่เจอระหว่าง Training (และวิธีแก้)
+
+#### ❌ Problem 1: Out of Memory (OOM)
+
+**ปัญหาเดิม:**
+```
+CUDA out of memory. Tried to allocate 2.00 GiB
+```
+
+**สาเหตุ**: 
+- Qwen 7B ใหญ่เกินไปสำหรับ T4 GPU (16GB VRAM)
+- Full fine-tuning ใช้หน่วยความจำมาก
+
+**วิธีแก้:**
+```python
+# 1. ใช้ 4-bit Quantization (QLoRA)
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,              # 4-bit quantization
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_use_double_quant=True,  # Nested quantization
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+# 2. ใช้ LoRA (Low-Rank Adaptation)
+lora_config = LoraConfig(
+    r=16,                    # Rank (ต่ำ = ประหยัด memory)
+    lora_alpha=32,
+    lora_dropout=0.05,
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj"]
+)
+
+# 3. Gradient Checkpointing
+model.gradient_checkpointing_enable()
+
+# 4. Reduce Batch Size
+training_args = TrainingArguments(
+    per_device_train_batch_size=1,  # ต่ำสุด
+    gradient_accumulation_steps=4,  # Effective batch = 4
+)
+```
+
+**ผลลัพธ์**: 
+- Memory ลดลงจาก ~30GB → **14.74GB** ✅
+- Train ได้บน T4 GPU (Free Tier)
+- Trainable params: 40M (0.92% of 7.6B)
+
+---
+
+#### ❌ Problem 2: Training Too Slow
+
+**ปัญหาเดิม:**
+```
+Estimated time: 8+ hours for 3 epochs
+```
+
+**สาเหตุ**:
+- Dataset ใหญ่ (185 samples)
+- Sequence length ยาว (1024 tokens)
+
+**วิธีแก้:**
+```python
+# 1. Reduce max_length
+max_length = 1024  # Down from 2048
+
+# 2. Use fp16/bf16 training
+training_args = TrainingArguments(
+    fp16=True,  # หรือ bf16=True สำหรับ A100/T4
+)
+
+# 3. Optimize data loading
+dataloader_num_workers=2
+
+# 4. Gradient accumulation
+gradient_accumulation_steps=4  # Update every 4 steps
+```
+
+**ผลลัพธ์**:
+- Training time: **2.5 hours** (จาก 8 hours) ✅
+- Cost: **$0** (Google Colab Free Tier)
+
+---
+
+#### ❌ Problem 3: Model Quality Issues
+
+**ปัญหาเดิม:**
+```
+Model generates generic responses, not brand-specific
+```
+
+**สาเหตุ**:
+- Dataset ไม่เพียงพอ (เดิม: 60 samples)
+- Instruction format ไม่ชัดเจน
+
+**วิธีแก้:**
+```python
+# 1. Expand dataset
+# เดิม: 60 samples
+# ใหม่: 185 samples (+208%)
+# Coverage: 8 brands × 5 use cases
+
+# 2. Improve instruction format
+instruction_template = """You are AI Director, a creative assistant...
+
+Brand Context:
+{brand_context}
+
+User Request:
+{user_request}
+
+Generate a professional response..."""
+
+# 3. Add more epochs
+num_train_epochs = 3  # (จาก 1 epoch)
+
+# 4. Tune learning rate
+learning_rate = 2e-4  # Sweet spot for LoRA
+```
+
+**ผลลัพธ์**:
+- Training loss: 1.2 → **0.6097** ✅
+- Validation loss: **0.5843** ✅
+- Model เข้าใจ brand personality ชัดเจน
+
+---
+
+#### ❌ Problem 4: Checkpoint Too Large
+
+**ปัญหาเดิม:**
+```
+Full model checkpoint = 15 GB (too large for free storage)
+```
+
+**วิธีแก้:**
+```python
+# Save only LoRA adapters (not full model)
+model.save_pretrained("trained_models/qwen-7b-ai-director-v2")
+
+# Result: 666 MB (จาก 15 GB)
+# Can upload to GitHub, HuggingFace Hub
+```
+
+---
+
+### ความเชื่อมโยงระหว่าง Module 4 และ Module 5
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    AI DIRECTOR SYSTEM                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  USER QUERY                                                  │
+│      ├──────────────────┬──────────────────┐                │
+│      │                  │                  │                │
+│      ▼                  ▼                  ▼                │
+│  [Module 5]        [Module 5]        [Module 5]             │
+│  Vector RAG        BM25 Search       Hybrid                 │
+│      │                  │                  │                │
+│      └──────────────────┴──────────────────┘                │
+│                         │                                   │
+│                         ▼                                   │
+│              [Retrieve Brand Context]                       │
+│              - Brand personality                            │
+│              - Product details                              │
+│              - Marketing guidelines                         │
+│                         │                                   │
+│                         ▼                                   │
+│                   [Module 4]                                │
+│            Fine-tuned Qwen 7B Model                         │
+│         (LoRA adapters: 666 MB)                             │
+│                         │                                   │
+│                         ▼                                   │
+│              [Generate Response]                            │
+│            - Brand-aware content                            │
+│            - Creative & professional                        │
+│            - Multi-format output                            │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Flow:**
+1. User → Query
+2. Module 5 → Retrieve relevant brand context (Hybrid search)
+3. Module 4 → Generate response with context
+4. System → Return brand-specific, creative content
+
+---
+
+### เอกสาร Module 4 ที่ต้องอ่าน
+
+**ถ้าต้องเข้าใจ Module 4 Training:**
+
+1. **[../module4/TRAINING_SUMMARY.md](../module4/TRAINING_SUMMARY.md)**
+   - Training configuration
+   - Dataset details (185 samples)
+   - Performance metrics
+   - Checkpoint information
+
+2. **[../module4/README.md](../module4/README.md)**
+   - Complete training guide
+   - Troubleshooting
+   - Model usage
+
+3. **[../module4.5/COLAB_QUICKSTART.md](../module4.5/COLAB_QUICKSTART.md)**
+   - Quick start for optimization
+   - Hyperparameter tuning guide
+
+4. **[../module4/AI_Director_Training_v2_Final.ipynb](../module4/AI_Director_Training_v2_Final.ipynb)**
+   - Full training notebook
+   - Step-by-step code
+
+---
+
+### สรุป: จาก Module 4 → Module 5
+
+**Module 4 สร้าง**:
+- ✅ Fine-tuned Model (Qwen 7B + LoRA)
+- ✅ เข้าใจ 8 brands
+- ✅ Generate creative content
+- ✅ Training บน Colab (free, 2.5 hours)
+
+**Module 5 เพิ่ม**:
+- ✅ Vector Search (semantic)
+- ✅ Hybrid Retrieval (quality)
+- ✅ MongoDB Atlas (scalable)
+- ✅ FastAPI (production)
+
+**Together = AI Director System** 🚀
+
+---
+
 ## 🏗️ Architecture Overview
 
 ### System Components
