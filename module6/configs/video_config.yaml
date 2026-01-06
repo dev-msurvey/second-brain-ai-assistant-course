@@ -1,0 +1,165 @@
+# Module 6: Video Composition Configuration
+
+# Default video settings
+video_defaults:
+  fps: 30
+  resolution: [1920, 1080]  # Width x Height
+  codec: "libx264"
+  audio_codec: "aac"
+  bitrate: "5000k"
+  preset: "medium"  # ultrafast, fast, medium, slow, veryslow
+
+# Platform-specific presets
+platform_presets:
+  youtube:
+    resolution: [1920, 1080]  # 16:9
+    fps: 30
+    bitrate: "8000k"
+    
+  instagram_feed:
+    resolution: [1080, 1080]  # 1:1
+    fps: 30
+    bitrate: "5000k"
+    
+  instagram_story:
+    resolution: [1080, 1920]  # 9:16
+    fps: 30
+    bitrate: "5000k"
+    
+  tiktok:
+    resolution: [1080, 1920]  # 9:16
+    fps: 30
+    bitrate: "5000k"
+    
+  facebook:
+    resolution: [1280, 720]  # 16:9
+    fps: 30
+    bitrate: "4000k"
+
+# Transition settings
+transitions:
+  enabled: true
+  default_duration: 0.5  # seconds
+  
+  types:
+    fade:
+      duration: 0.5
+      
+    dissolve:
+      duration: 0.7
+      
+    crossfade:
+      duration: 1.0
+      overlap: 0.5
+      
+    cut:
+      duration: 0.0
+
+# Effect settings
+effects:
+  zoom_in:
+    zoom_factor: 0.2  # 20% zoom
+    
+  zoom_out:
+    zoom_factor: 0.2
+    start_zoom: 1.2  # Start at 120%
+    
+  pan_left:
+    pan_factor: 0.1  # 10% of width
+    
+  pan_right:
+    pan_factor: 0.1
+
+# Text overlay settings
+text_overlays:
+  default_font: "Arial"
+  default_size: 70
+  default_color: "white"
+  default_duration: 3.0
+  
+  fade_in_duration: 0.3
+  fade_out_duration: 0.3
+  
+  positions:
+    center: ["center", "center"]
+    top: ["center", 100]
+    bottom: ["center", 920]  # For 1080p
+    
+  styles:
+    title:
+      size: 90
+      color: "white"
+      font: "Arial-Bold"
+      
+    subtitle:
+      size: 50
+      color: "lightgray"
+      font: "Arial"
+      
+    caption:
+      size: 40
+      color: "white"
+      font: "Arial"
+
+# Audio settings
+audio:
+  voiceover:
+    volume: 1.0
+    fade_in: 0.2
+    fade_out: 0.2
+    
+  background_music:
+    volume: 0.3
+    fade_in: 1.0
+    fade_out: 2.0
+    loop: true
+    
+  mix:
+    normalize: true
+    ducking: false  # Lower music when voice is speaking
+
+# Export settings
+export:
+  threads: 4
+  remove_temp: true
+  verbose: false
+  logger: "bar"  # Options: "bar", null
+  
+# Ad templates
+ad_templates:
+  minimal:
+    transitions: ["fade"]
+    effects: ["zoom_in"]
+    text_style: "title"
+    background_music_volume: 0.2
+    
+  dynamic:
+    transitions: ["crossfade"]
+    effects: ["zoom_in", "zoom_out", "pan_left"]
+    text_style: "title"
+    background_music_volume: 0.3
+    
+  cinematic:
+    transitions: ["fade"]
+    effects: ["pan_right"]
+    text_style: "subtitle"
+    background_music_volume: 0.4
+
+# Output organization
+output:
+  directory: "./output/videos"
+  naming_pattern: "{project}_{timestamp}"
+  formats:
+    - "mp4"
+    
+# Performance settings
+performance:
+  max_memory_mb: 2000
+  temp_directory: "./temp"
+  cleanup_on_error: true
+
+# Quality settings
+quality:
+  preview_quality: "medium"  # For quick previews
+  final_quality: "high"
+  audio_bitrate: "192k"
