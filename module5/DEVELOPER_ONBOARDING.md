@@ -381,6 +381,11 @@ model.save_pretrained("trained_models/qwen-7b-ai-director-v2")
    - Full training notebook
    - Step-by-step code
 
+5. **[../models_me/ai-director-colab/ai-director-colab/TROUBLESHOOTING.md](../models_me/ai-director-colab/ai-director-colab/TROUBLESHOOTING.md)** ⭐
+   - **ปัญหาจากการใช้งานจริงบน Colab** (4 ปัญหา)
+   - วิธีแก้ไขแบบละเอียด พร้อม code examples
+   - **ต้องอ่าน** ถ้าจะใช้โมเดลที่เทรนบน Colab
+
 ---
 
 ### สรุป: จาก Module 4 → Module 5
@@ -396,6 +401,216 @@ model.save_pretrained("trained_models/qwen-7b-ai-director-v2")
 - ✅ Hybrid Retrieval (quality)
 - ✅ MongoDB Atlas (scalable)
 - ✅ FastAPI (production)
+
+**Together = AI Director System** 🚀
+
+---
+
+### ⚠️ ปัญหาเพิ่มเติมจากการใช้งานบน Colab (Inference)
+
+> **สำคัญ**: นอกจาก 4 ปัญหาด้านบน ยังมีอีก 4 ปัญหาที่เจอตอน **ใช้งานโมเดลจริงบน Colab**  
+> ดูรายละเอียดเต็มใน [TROUBLESHOOTING.md](../models_me/ai-director-colab/ai-director-colab/TROUBLESHOOTING.md)
+
+#### ❌ Problem 5: โฟลเดอร์โมเดลไม่พบ (Account Migration)
+
+**Error:**
+```
+ls: cannot access '/content/drive/MyDrive/.../qwen-7b-ai-director-v2': No such file or directory
+```
+
+**สาเหตุ**:
+- ย้าย Google Account ใหม่ แต่โมเดลยังอยู่ใน account เก่า
+- ไฟล์ `.zip` ยังไม่ได้ extract
+
+**วิธีแก้ (3 วิธี)**:
+
+1. **Auto-extract ใน Notebook** (แนะนำ):
+```python
+import zipfile
+base_path = "/content/drive/MyDrive/ai-director-colab"
+zip_files = !ls {base_path}/trained_models*.zip 2>/dev/null
+
+if zip_files and zip_files[0]:
+    with zipfile.ZipFile(zip_files[0], 'r') as zip_ref:
+        zip_ref.extractall(base_path)
+    print("✅ Extract สำเร็จ!")
+```
+
+2. **Share folder จาก account เก่า**:
+   - Right-click folder → Share → Add email account ใหม่
+   - Account ใหม่: Add shortcut to Drive
+
+3. **Download & Upload**:
+   - Download `trained_models-*.zip` (579 MB)
+   - Upload ไปที่ Drive account ใหม่
+
+---
+
+#### ❌ Problem 6: KeyError เมื่อโหลดโมเดล
+
+**Error:**
+```python
+KeyError: 'base_model.model.model.model.layers.10.input_layernorm'
+```
+
+**สาเหตุ**: 
+- **ตอนเทรน**: ใช้ 4-bit quantization (QLoRA)
+- **ตอน inference**: โหลดแบบ full precision (ไม่มี quantization)
+- LoRA adapters ไม่ match architecture
+
+**วิธีแก้** (CRITICAL):
+```python
+from transformers import BitsAndBytesConfig
+
+# ❌ ผิด - ไม่มี quantization config
+model = AutoModelForCausalLM.from_pretrained(
+    base_model,
+    device_map="auto"
+)
+
+# ✅ ถูก - เพิ่ม BitsAndBytesConfig
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    base_model,
+    quantization_config=bnb_config,  # ← MUST HAVE
+    device_map="auto"
+)
+```
+
+**หลักการ**: QLoRA ต้องใช้ 4-bit base model + 16-bit adapters ทั้ง training และ inference
+
+---
+
+#### ❌ Problem 7: Output มี Prompt Structure ปน
+
+**Output ที่ผิด:**
+```
+system
+You are an AI Director for marketing content creation...
+user
+เขียน Instagram caption สำหรับ CoffeeLab
+assistant
+จากไร่คุณลุงสมชาย สู่โต๊ะอาหารคุณ 🌱
+```
+
+**สาเหตุ**: 
+- `tokenizer.decode()` decode ทั้ง input + output
+- Special tokens `<|im_start|>` ถูก skip จาก `skip_special_tokens=True`
+
+**วิธีแก้**:
+```python
+def generate_content(instruction, input_text, max_length=512):
+    prompt = f"""<|im_start|>system
+You are an AI Director...<|im_end|>
+<|im_start|>user
+{instruction}
+{input_text}<|im_end|>
+<|im_start|>assistant
+"""
+    
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+    outputs = model.generate(**inputs, max_new_tokens=max_length, ...)
+    
+    # Decode full output
+    full_response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    
+    # ✅ Split ที่คำว่า "assistant" (ไม่ใช่ special token)
+    if "assistant" in full_response:
+        parts = full_response.split("assistant")
+        result = parts[-1].strip()  # เอาส่วนสุดท้าย
+        return result
+    
+    return full_response.strip()
+```
+
+**Output ที่ถูก:**
+```
+จากไร่คุณลุงสมชาย สู่โต๊ะอาหารคุณ 🌱
+เริ่มต้นเช้าวันใหม่ด้วยกาแฟที่ใช่ 💕
+#CoffeeLab #SingleOrigin #PremiumCoffee
+```
+
+---
+
+#### ❌ Problem 8: Path ของ inference_rag.py ผิด
+
+**Error:**
+```python
+ValueError: Can't find 'adapter_config.json' at '/content/ai-director-colab/scripts/models/...'
+```
+
+**สาเหตุ**: 
+- `inference_rag.py` ใช้ relative path เก่า: `../models/qwen-7b-ai-director`
+- โมเดลจริงอยู่ที่ Google Drive: `/content/drive/MyDrive/ai-director-colab/trained_models/`
+
+**วิธีแก้**:
+```python
+# ❌ เดิม - relative path
+lora_adapter_path = "../models/qwen-7b-ai-director"
+
+# ✅ ใหม่ - absolute path to Google Drive
+lora_adapter_path = "/content/drive/MyDrive/ai-director-colab/trained_models/qwen-7b-ai-director-v2"
+```
+
+**Location**: แก้ใน `scripts/inference_rag.py` บรรทัด 415
+
+---
+
+### 📝 Best Practices: โหลดโมเดลบน Colab
+
+**Checklist ก่อนโหลด:**
+- ✅ Mount Google Drive
+- ✅ ตรวจสอบว่ามีโฟลเดอร์โมเดล (ถ้าไม่มี → extract zip)
+- ✅ ใช้ `BitsAndBytesConfig` เหมือนตอนเทรน
+- ✅ ใช้ absolute path สำหรับโมเดลใน Drive
+- ✅ Parse output ด้วย string splitting (ไม่ใช่ special tokens)
+
+**โค้ด Template สำหรับโหลดโมเดลบน Colab:**
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from peft import PeftModel
+import torch
+
+# 1. Mount Drive
+from google.colab import drive
+drive.mount('/content/drive')
+
+# 2. Check model folder
+model_path = "/content/drive/MyDrive/ai-director-colab/trained_models/qwen-7b-ai-director-v2"
+if not os.path.exists(model_path):
+    print("⚠️ Model not found! Extracting zip...")
+    # Auto-extract code here
+
+# 3. Load with 4-bit quantization
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+base_model = "Qwen/Qwen2.5-7B-Instruct"
+model = AutoModelForCausalLM.from_pretrained(
+    base_model,
+    quantization_config=bnb_config,
+    device_map="auto",
+    trust_remote_code=True
+)
+
+# 4. Load LoRA adapters
+model = PeftModel.from_pretrained(model, model_path)
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+
+print("✅ Model loaded successfully!")
+```
+
+---
 
 **Together = AI Director System** 🚀
 
