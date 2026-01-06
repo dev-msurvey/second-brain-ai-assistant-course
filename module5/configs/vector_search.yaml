@@ -1,0 +1,22 @@
+# Vector Search Configuration
+# Optimized for semantic similarity search
+
+embedding:
+  type: sentence-transformers
+  model_name: all-MiniLM-L6-v2
+  dimensions: 384
+
+vector_search:
+  index_name: vector_index
+  similarity_metric: cosine
+  num_candidates_multiplier: 10  # Higher = better recall, slower
+  
+retrieval:
+  default_k: 5
+  max_k: 10
+  search_on: child
+  return: parent
+
+performance:
+  cache_embeddings: true  # Cache for repeated queries
+  batch_size: 32

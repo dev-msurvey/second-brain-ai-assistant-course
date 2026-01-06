@@ -1,0 +1,54 @@
+# Module 5 Default Configuration
+
+# MongoDB Settings
+mongodb:
+  database_name: ai_director
+  collection_name: brand_vectors
+  connection_timeout: 5000  # milliseconds
+
+# Embedding Model
+embedding:
+  type: sentence-transformers  # or "openai"
+  model_name: all-MiniLM-L6-v2
+  dimensions: 384
+  device: cpu  # or "cuda" for GPU
+
+# Vector Search
+vector_search:
+  index_name: vector_index
+  similarity_metric: cosine  # cosine, euclidean, dotProduct
+  num_candidates_multiplier: 10  # k * multiplier for overrequest
+
+# BM25 Search
+bm25:
+  enabled: true
+  tokenizer: word_tokenize  # NLTK tokenizer
+
+# Hybrid Search
+hybrid:
+  vector_weight: 0.5
+  bm25_weight: 0.5
+  rrf_k: 60  # Reciprocal Rank Fusion constant
+
+# Parent-Child Retrieval
+parent_child:
+  search_on: child  # Search on "child" documents
+  return: parent    # Return "parent" documents
+  default_k: 3      # Default number of results
+
+# Text Chunking (for ingestion)
+chunking:
+  chunk_size: 256   # tokens
+  chunk_overlap: 50 # tokens
+  strategy: simple  # simple, semantic, or contextual
+
+# Performance
+performance:
+  cache_embeddings: false
+  batch_size: 32
+  max_workers: 4
+
+# Logging
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

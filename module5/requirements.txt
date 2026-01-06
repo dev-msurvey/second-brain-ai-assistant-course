@@ -1,0 +1,29 @@
+# Module 5: Production RAG System Dependencies
+
+# Core ML/NLP
+sentence-transformers>=2.2.0  # Free embedding model (all-MiniLM-L6-v2)
+torch>=2.0.0
+
+# MongoDB Vector Search
+pymongo>=4.6.0
+langchain-mongodb>=0.1.0
+langchain>=0.1.0
+langchain-community>=0.0.20
+
+# Text Processing
+nltk>=3.8.0
+tiktoken>=0.5.0
+rank-bm25>=0.2.2  # BM25 for hybrid retrieval
+
+# Utilities
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+pyyaml>=6.0
+
+# API (Production)
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# Optional: Alternative Vector DBs (if needed)
+# chromadb>=0.4.0  # Local alternative
+# qdrant-client>=1.7.0  # Cloud alternative

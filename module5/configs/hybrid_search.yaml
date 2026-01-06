@@ -1,0 +1,35 @@
+# Hybrid Search Configuration  
+# Combines Vector Search + BM25 for best quality
+
+embedding:
+  type: sentence-transformers
+  model_name: all-MiniLM-L6-v2
+
+vector_search:
+  enabled: true
+  index_name: vector_index
+  similarity_metric: cosine
+  num_candidates_multiplier: 10
+
+bm25:
+  enabled: true
+  tokenizer: word_tokenize
+
+hybrid:
+  # Weights for score fusion (should sum to 1.0)
+  vector_weight: 0.5
+  bm25_weight: 0.5
+  
+  # Reciprocal Rank Fusion
+  rrf_k: 60  # Higher = less aggressive rank decay
+  
+  # Strategy
+  fusion_method: rrf  # rrf (Reciprocal Rank Fusion) or weighted
+
+retrieval:
+  default_k: 3
+  max_k: 10
+  
+performance:
+  cache_embeddings: true
+  build_bm25_on_startup: true

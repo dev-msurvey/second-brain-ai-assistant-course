@@ -1,0 +1,35 @@
+# FastAPI Production Configuration
+
+api:
+  title: AI Director RAG API
+  version: 1.0.0
+  description: Production RAG System with Vector Search
+  host: 0.0.0.0
+  port: 8000
+  workers: 1  # Increase for production
+  reload: false  # Set true for development
+
+cors:
+  enabled: true
+  allow_origins: ["*"]  # Configure for production
+  allow_credentials: true
+  allow_methods: ["*"]
+  allow_headers: ["*"]
+
+search:
+  default_method: hybrid  # vector, bm25, or hybrid
+  default_k: 3
+  max_k: 10
+  
+rate_limiting:
+  enabled: false  # Enable for production
+  requests_per_minute: 60
+
+caching:
+  enabled: false  # Enable for production
+  ttl: 300  # seconds
+
+logging:
+  level: INFO
+  format: json  # json or text
+  access_log: true

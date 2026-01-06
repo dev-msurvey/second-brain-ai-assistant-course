@@ -1,0 +1,13 @@
+# Core dependencies for Module 1
+transformers>=4.45.0
+torch>=2.5.0
+accelerate>=0.34.0
+pillow>=10.4.0
+requests>=2.31.0
+
+# Optional: For faster inference
+# bitsandbytes>=0.41.0  # Uncomment for 4-bit quantization support
+
+# Development tools
+ipython
+jupyter

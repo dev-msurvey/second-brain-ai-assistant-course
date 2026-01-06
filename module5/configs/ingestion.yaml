@@ -1,0 +1,53 @@
+# Data Ingestion Configuration
+
+mongodb:
+  database_name: ai_director
+  collection_name: brand_vectors
+
+embedding:
+  type: sentence-transformers
+  model_name: all-MiniLM-L6-v2
+  dimensions: 384
+  device: cpu
+  batch_size: 32
+
+chunking:
+  # Text chunking strategy
+  strategy: simple  # simple, semantic, or contextual
+  chunk_size: 256   # tokens (for simple)
+  chunk_overlap: 50 # tokens
+  
+  # For semantic chunking
+  similarity_threshold: 0.5
+  
+  # For contextual chunking
+  context_window: 2  # sentences before/after
+
+document_structure:
+  parent_type: parent
+  child_type: child
+  
+  # Fields to include
+  parent_fields:
+    - brand_name
+    - tagline
+    - description
+    - industry
+    - tone
+    - values
+    - colors
+    
+  child_fields:
+    - brand_name
+    - text
+    - chunk_index
+    - parent_id
+
+vector_index:
+  create_on_ingestion: false  # Create manually via Atlas UI
+  index_name: vector_index
+
+processing:
+  clear_existing: false  # Clear collection before ingestion
+  skip_existing: true    # Skip if brand already exists
+  validate_data: true

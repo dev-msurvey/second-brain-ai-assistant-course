@@ -1,0 +1,136 @@
+{
+  "best_parameters": {
+    "lora_rank": 32,
+    "lora_alpha": 64,
+    "learning_rate": 0.00012,
+    "batch_size": 2
+  },
+  "best_loss": 0.5621,
+  "baseline_loss": 0.6097,
+  "improvement_percent": 7.8,
+  "num_trials": 20,
+  "all_trials": [
+    {
+      "trial": 1,
+      "parameters": {"lora_rank": 16, "lora_alpha": 32, "learning_rate": 0.0002, "batch_size": 1},
+      "eval_loss": 0.6097,
+      "timestamp": "2026-01-05T10:00:00"
+    },
+    {
+      "trial": 2,
+      "parameters": {"lora_rank": 32, "lora_alpha": 64, "learning_rate": 0.00015, "batch_size": 2},
+      "eval_loss": 0.5834,
+      "timestamp": "2026-01-05T10:08:00"
+    },
+    {
+      "trial": 3,
+      "parameters": {"lora_rank": 8, "lora_alpha": 16, "learning_rate": 0.0003, "batch_size": 1},
+      "eval_loss": 0.6523,
+      "timestamp": "2026-01-05T10:16:00"
+    },
+    {
+      "trial": 4,
+      "parameters": {"lora_rank": 64, "lora_alpha": 128, "learning_rate": 0.0001, "batch_size": 4},
+      "eval_loss": 0.6012,
+      "timestamp": "2026-01-05T10:24:00"
+    },
+    {
+      "trial": 5,
+      "parameters": {"lora_rank": 32, "lora_alpha": 64, "learning_rate": 0.00012, "batch_size": 2},
+      "eval_loss": 0.5621,
+      "timestamp": "2026-01-05T10:32:00"
+    },
+    {
+      "trial": 6,
+      "parameters": {"lora_rank": 16, "lora_alpha": 32, "learning_rate": 0.00018, "batch_size": 2},
+      "eval_loss": 0.5892,
+      "timestamp": "2026-01-05T10:40:00"
+    },
+    {
+      "trial": 7,
+      "parameters": {"lora_rank": 32, "lora_alpha": 32, "learning_rate": 0.00015, "batch_size": 1},
+      "eval_loss": 0.5945,
+      "timestamp": "2026-01-05T10:48:00"
+    },
+    {
+      "trial": 8,
+      "parameters": {"lora_rank": 16, "lora_alpha": 64, "learning_rate": 0.00025, "batch_size": 1},
+      "eval_loss": 0.6234,
+      "timestamp": "2026-01-05T10:56:00"
+    },
+    {
+      "trial": 9,
+      "parameters": {"lora_rank": 32, "lora_alpha": 64, "learning_rate": 0.00011, "batch_size": 2},
+      "eval_loss": 0.5678,
+      "timestamp": "2026-01-05T11:04:00"
+    },
+    {
+      "trial": 10,
+      "parameters": {"lora_rank": 64, "lora_alpha": 64, "learning_rate": 0.00013, "batch_size": 2},
+      "eval_loss": 0.5756,
+      "timestamp": "2026-01-05T11:12:00"
+    },
+    {
+      "trial": 11,
+      "parameters": {"lora_rank": 8, "lora_alpha": 32, "learning_rate": 0.00020, "batch_size": 2},
+      "eval_loss": 0.6189,
+      "timestamp": "2026-01-05T11:20:00"
+    },
+    {
+      "trial": 12,
+      "parameters": {"lora_rank": 32, "lora_alpha": 128, "learning_rate": 0.00014, "batch_size": 2},
+      "eval_loss": 0.5723,
+      "timestamp": "2026-01-05T11:28:00"
+    },
+    {
+      "trial": 13,
+      "parameters": {"lora_rank": 16, "lora_alpha": 16, "learning_rate": 0.00015, "batch_size": 1},
+      "eval_loss": 0.6345,
+      "timestamp": "2026-01-05T11:36:00"
+    },
+    {
+      "trial": 14,
+      "parameters": {"lora_rank": 32, "lora_alpha": 64, "learning_rate": 0.00013, "batch_size": 2},
+      "eval_loss": 0.5689,
+      "timestamp": "2026-01-05T11:44:00"
+    },
+    {
+      "trial": 15,
+      "parameters": {"lora_rank": 16, "lora_alpha": 32, "learning_rate": 0.00010, "batch_size": 2},
+      "eval_loss": 0.5912,
+      "timestamp": "2026-01-05T11:52:00"
+    },
+    {
+      "trial": 16,
+      "parameters": {"lora_rank": 32, "lora_alpha": 64, "learning_rate": 0.00016, "batch_size": 1},
+      "eval_loss": 0.5867,
+      "timestamp": "2026-01-05T12:00:00"
+    },
+    {
+      "trial": 17,
+      "parameters": {"lora_rank": 64, "lora_alpha": 128, "learning_rate": 0.00012, "batch_size": 2},
+      "eval_loss": 0.5834,
+      "timestamp": "2026-01-05T12:08:00"
+    },
+    {
+      "trial": 18,
+      "parameters": {"lora_rank": 8, "lora_alpha": 64, "learning_rate": 0.00015, "batch_size": 2},
+      "eval_loss": 0.6078,
+      "timestamp": "2026-01-05T12:16:00"
+    },
+    {
+      "trial": 19,
+      "parameters": {"lora_rank": 32, "lora_alpha": 64, "learning_rate": 0.00011, "batch_size": 2},
+      "eval_loss": 0.5698,
+      "timestamp": "2026-01-05T12:24:00"
+    },
+    {
+      "trial": 20,
+      "parameters": {"lora_rank": 32, "lora_alpha": 64, "learning_rate": 0.00012, "batch_size": 2},
+      "eval_loss": 0.5621,
+      "timestamp": "2026-01-05T12:32:00"
+    }
+  ],
+  "timestamp": "2026-01-05T12:32:15",
+  "note": "SIMULATED RESULTS - Generated for demonstration without GPU. Use Google Colab with T4 GPU for actual optimization."
+}
