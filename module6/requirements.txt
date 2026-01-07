@@ -3,7 +3,9 @@
 # Core dependencies
 edge-tts==6.1.9             # Voice generation (Thai + English)
 moviepy==1.0.3              # Video composition
-Pillow==10.2.0              # Image processing
+Pillow==10.0.1              # Image processing (compatible with moviepy 1.0.3)
+imageio==2.31.1             # Video I/O (compatible with moviepy 1.0.3)
+imageio-ffmpeg==0.4.8       # FFmpeg bindings
 requests==2.31.0            # HTTP requests for APIs
 
 # HuggingFace for image generation

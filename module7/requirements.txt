@@ -16,7 +16,9 @@ nltk==3.8.1                 # Text processing
 # Module 6: Production Tools
 edge-tts==6.1.9             # Voice generation
 moviepy==1.0.3              # Video composition
-Pillow==10.2.0              # Image processing
+Pillow==10.0.1              # Image processing (compatible with moviepy 1.0.3)
+imageio==2.31.1             # Video I/O (compatible with moviepy 1.0.3)
+imageio-ffmpeg==0.4.8       # FFmpeg bindings
 huggingface-hub==0.20.3     # HuggingFace API
 
 # Module 6.5: Smart Cut

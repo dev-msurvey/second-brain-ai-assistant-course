@@ -2,7 +2,9 @@
 
 # Core dependencies from Module 6
 moviepy==1.0.3              # Video editing
-Pillow==10.2.0              # Image processing
+Pillow==10.0.1              # Image processing (compatible with moviepy 1.0.3)
+imageio==2.31.1             # Video I/O (compatible with moviepy 1.0.3)
+imageio-ffmpeg==0.4.8       # FFmpeg bindings
 
 # Scene detection
 scenedetect[opencv]==0.6.3  # PySceneDetect for scene analysis
