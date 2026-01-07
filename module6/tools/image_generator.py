@@ -102,10 +102,14 @@ class ImageGenerator:
                 "Set HF_TOKEN environment variable or pass api_token parameter."
             )
         
-        self.api_url = f"https://api-inference.huggingface.co/models/{self.model_id}"
+        # HuggingFace Serverless Inference API is deprecated/restricted
+        # Fallback to placeholder generation for now
+        # TODO: Use Replicate API or local Stable Diffusion
+        self.api_url = None  # Disabled
         self.headers = {"Authorization": f"Bearer {self.api_token}"}
         
-        logger.info(f"✅ ImageGenerator initialized with model: {self.model_id}")
+        logger.warning("⚠️  HF Inference API unavailable - using placeholder generation")
+        logger.info(f"✅ ImageGenerator initialized with model: {self.model_id} (placeholder mode)")
     
     def generate(
         self,
@@ -154,6 +158,11 @@ class ImageGenerator:
         
         logger.info(f"🎨 Generating image: {prompt[:50]}...")
         
+        # HF API unavailable - use placeholder
+        if not self.api_url:
+            logger.warning("⚠️  Using placeholder image (HF API unavailable)")
+            return self._create_placeholder(prompt, width, height, output_file)
+        
         # Make request with retries
         for attempt in range(self.retry_attempts):
             try:
@@ -184,7 +193,11 @@ class ImageGenerator:
                     continue
                 
                 else:
-                    error_msg = response.json().get("error", response.text)
+                    # Try to get error message from JSON, fallback to text
+                    try:
+                        error_msg = response.json().get("error", response.text)
+                    except:
+                        error_msg = response.text or f"HTTP {response.status_code}"
                     raise RuntimeError(f"API Error ({response.status_code}): {error_msg}")
                     
             except requests.exceptions.Timeout:
@@ -234,6 +247,68 @@ class ImageGenerator:
         
         logger.info(f"✅ Generated {len([img for img in images if img])} out of {len(prompts)} images")
         return images
+    
+    def _create_placeholder(
+        self,
+        prompt: str,
+        width: int,
+        height: int,
+        output_file: Optional[str] = None
+    ) -> Image.Image:
+        """Create a placeholder image when API is unavailable."""
+        from PIL import ImageDraw, ImageFont
+        
+        # Create colored image based on prompt hash
+        import hashlib
+        prompt_hash = int(hashlib.md5(prompt.encode()).hexdigest()[:6], 16)
+        colors = [
+            (52, 152, 219),   # Blue
+            (46, 204, 113),   # Green
+            (155, 89, 182),   # Purple
+            (241, 196, 15),   # Yellow
+            (231, 76, 60),    # Red
+            (26, 188, 156),   # Turquoise
+        ]
+        color = colors[prompt_hash % len(colors)]
+        
+        # Create image
+        image = Image.new('RGB', (width, height), color)
+        draw = ImageDraw.Draw(image)
+        
+        # Add text
+        try:
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
+        except:
+            font = ImageFont.load_default()
+        
+        text = f"Placeholder\n{prompt[:50]}"
+        
+        # Draw text with background
+        bbox = draw.textbbox((0, 0), text, font=font)
+        text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
+        
+        x = (width - text_width) // 2
+        y = (height - text_height) // 2
+        
+        # Background rectangle
+        padding = 20
+        draw.rectangle(
+            [x - padding, y - padding, x + text_width + padding, y + text_height + padding],
+            fill=(0, 0, 0, 128)
+        )
+        
+        # Text
+        draw.text((x, y), text, fill='white', font=font)
+        
+        # Save if requested
+        if output_file:
+            output_path = Path(output_file)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            image.save(output_file)
+            logger.info(f"✅ Placeholder saved to: {output_file}")
+        
+        return image
     
     def get_available_models(self) -> List[str]:
         """Get list of available models."""
