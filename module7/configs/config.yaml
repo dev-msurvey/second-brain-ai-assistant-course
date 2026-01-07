@@ -1,0 +1,79 @@
+# Module 7: Integration Configuration
+director:
+  # Module 5: Vector RAG
+  vector_rag:
+    mongodb_uri: ${MONGODB_URI}
+    mongodb_database: ai_director
+    mongodb_collection: brand_vectors
+    retrieval_method: hybrid  # vector, bm25, hybrid
+    top_k: 3
+    embedding_model: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  
+  # Module 6: Production Tools
+  production_tools:
+    hf_token: ${HF_TOKEN}
+    image_generator:
+      model: sdxl  # sdxl, flux
+      width: 1024
+      height: 1024
+      style: product
+    voice_generator:
+      language: thai
+      default_voice: th-TH-NiwatNeural
+      rate: "+0%"
+    video_composer:
+      fps: 30
+      resolution: [1920, 1080]
+      codec: libx264
+  
+  # Module 6.5: Smart Cut
+  smart_cut:
+    scene_detection:
+      method: content  # content, threshold, adaptive
+      threshold: 30.0
+    editing:
+      remove_silence: true
+      silence_threshold: -40  # dB
+      min_silence_duration: 0.5  # seconds
+    export:
+      quality: high
+      preset: medium
+  
+  # General
+  general:
+    output_dir: output
+    temp_dir: temp
+    cache_enabled: false
+    max_workers: 4
+    timeout: 300  # seconds
+
+# API Configuration
+api:
+  host: 0.0.0.0
+  port: 8000
+  reload: true
+  workers: 1
+  cors:
+    allow_origins: ["*"]
+    allow_methods: ["*"]
+    allow_headers: ["*"]
+  rate_limit:
+    enabled: false
+    requests_per_minute: 60
+
+# Logging
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/ai_director.log
+  max_bytes: 10485760  # 10MB
+  backup_count: 5
+
+# Monitoring
+monitoring:
+  prometheus:
+    enabled: false
+    port: 9090
+  health_check:
+    enabled: true
+    interval: 60  # seconds
