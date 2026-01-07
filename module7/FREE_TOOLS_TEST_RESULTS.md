@@ -263,7 +263,7 @@ test_output/
 
 **Recommendation**: **MERGE TO MAIN NOW**
 
-The MoviePy issue is a dependency management problem, not an architecture problem. It will be properly fixed in Module 8 with Docker and proper requirements management.
+The MoviePy issue is a dependency management problem, not an architecture problem. It will be properly fixed in Module 8 with proper requirements management.
 
 ---
 

@@ -264,9 +264,9 @@ git merge feature/module7-integration --no-ff
 - Fix MoviePy version pinning
 - Setup MongoDB Atlas
 - Setup HuggingFace token
-- Docker containerization
+- Python-native deployment setup
 - Full integration testing
-- Production deployment
+- Production deployment (VPS/PaaS)
 ```
 
 ---

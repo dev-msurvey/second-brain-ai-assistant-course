@@ -416,13 +416,16 @@ export OUTPUT_DIR="output"
 export TEMP_DIR="temp"
 ```
 
-### Docker (Future)
-```dockerfile
-FROM python:3.10-slim
-WORKDIR /app
-COPY module7/ /app/
-RUN pip install -r requirements.txt
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+### Python-Native Deployment
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run with uvicorn
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+
+# Or with systemd/PM2 for production
+pm2 start "uvicorn api.main:app --host 0.0.0.0 --port 8000" --name ai-director
 ```
 
 ### System Requirements
@@ -453,8 +456,7 @@ CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 - [ ] Redis caching layer
 - [ ] Celery task queue
 - [ ] Prometheus metrics
-- [ ] Docker containerization
-- [ ] Kubernetes deployment
+- [ ] Process management (systemd/PM2)
 - [ ] CI/CD pipeline
 - [ ] Load testing
 - [ ] Documentation website

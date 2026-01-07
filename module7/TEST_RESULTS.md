@@ -218,7 +218,7 @@ git push origin main
 
 ### Option 3: Deploy and Test in Production Environment
 Move to Module 8: Deployment for:
-- Docker containerization
+- Python-native deployment setup
 - Environment setup
 - Service configuration
 - Full integration testing
