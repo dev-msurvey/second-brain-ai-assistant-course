@@ -1,0 +1,45 @@
+# Module 6.5: Smart Cut Requirements
+
+# Core dependencies from Module 6
+moviepy==1.0.3              # Video editing
+Pillow==10.2.0              # Image processing
+
+# Scene detection
+scenedetect[opencv]==0.6.3  # PySceneDetect for scene analysis
+opencv-python==4.8.1.78     # OpenCV for video processing
+
+# Audio analysis
+librosa==0.10.1             # Audio feature extraction
+pydub==0.25.1               # Audio manipulation
+soundfile==0.12.1           # Audio I/O
+
+# Speech recognition (for subtitle alignment)
+vosk==0.3.45                # Offline speech recognition
+webrtcvad==2.0.10           # Voice activity detection
+
+# Video effects
+imageio==2.33.1             # Image/video I/O
+imageio-ffmpeg==0.4.9       # FFmpeg wrapper
+scikit-image==0.22.0        # Image processing algorithms
+
+# ML for scene understanding
+torch==2.1.2                # PyTorch (optional, for advanced features)
+torchvision==0.16.2         # Vision models (optional)
+
+# Utilities
+numpy==1.26.3               # Numerical computing
+scipy==1.11.4               # Scientific computing
+python-dotenv==1.0.0        # Environment variables
+pyyaml==6.0.1               # Configuration files
+tqdm==4.66.1                # Progress bars
+colorama==0.4.6             # Colored output
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+pytest-cov==4.1.0
+
+# Development
+black==23.12.1
+flake8==7.0.0
+mypy==1.8.0
